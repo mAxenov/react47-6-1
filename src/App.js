@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import Clock from './components/Clock';
+import CreateClock from './components/CreateClock';
+
 
 function App() {
+  const [clocks, setClocks] = useState([]);
+
+  const createClock = (clock) => {
+    setClocks([...clocks, clock]);
+  }
+
+  const removeClock = (clock) => {
+    setClocks((prevClock) => { return prevClock.filter(item => item.id !== clock.id) });
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <CreateClock create={createClock} />
+      <div className='clocks'>
+        {clocks.map((item) => {
+          return (<Clock key={item.id} timeZone={item.timeZone} name={item.name} remove={() => removeClock(item)} />);
+        })}
+      </div>
     </div>
   );
 }
